@@ -1,7 +1,10 @@
 'use strict';
-var userDialog = document.querySelector('.setup');
 var similarListElement = document.querySelector('.setup-similar-list');
 var similarWizardTemplate = document.querySelector('#similar-wizard-template').content.querySelector('.setup-similar-item');
+var setup = document.querySelector('.setup');
+var setupOpen = document.querySelector('.setup-open');
+var setupClose = setup.querySelector('.setup-close');
+var setupInput = setup.querySelector('.setup-user-name');
 
 var WIZARDS_QUANTITY = 4;
 var wizardParams = {
@@ -48,10 +51,54 @@ var getWizards = function (creatures) {
   return fragment;
 };
 
-var initApp = function () {
-  userDialog.classList.remove('hidden');
-  userDialog.querySelector('.setup-similar').classList.remove('hidden');
+var popupCloseEscHandler = function (evt) {
+  window.utils.isEscEvent(evt, setupCloseClickHandler);
+};
+
+var setupClosePressHandler = function (evt) {
+  window.utils.isEnterEvent(evt, setupCloseClickHandler);
+};
+
+var inputUserNameFocusHandler = function () {
+  document.removeEventListener('keydown', popupCloseEscHandler);
+};
+
+var inputUserNameBlurHandler = function () {
+  document.addEventListener('keydown', popupCloseEscHandler);
+};
+
+var showSetupSimilarList = function () {
+  similarListElement.innerHTML = '';
+  setup.querySelector('.setup-similar').classList.remove('hidden');
   similarListElement.appendChild(getWizards(getCreatures(WIZARDS_QUANTITY)));
 };
 
-initApp();
+var setupOpenClickHandler = function () {
+  setup.classList.remove('hidden');
+  document.addEventListener('keydown', popupCloseEscHandler);
+  setupClose.addEventListener('click', setupCloseClickHandler);
+  setupClose.addEventListener('keydown', setupClosePressHandler);
+  setupInput.removeEventListener('focus', inputUserNameFocusHandler);
+  setupInput.removeEventListener('blur', inputUserNameBlurHandler);
+
+  showSetupSimilarList();
+};
+
+var setupCloseClickHandler = function () {
+  setup.classList.add('hidden');
+  document.removeEventListener('keydown', popupCloseEscHandler);
+  setupClose.removeEventListener('click', setupCloseClickHandler);
+  setupClose.removeEventListener('keydown', setupClosePressHandler);
+  setupInput.addEventListener('focus', inputUserNameFocusHandler);
+  setupInput.addEventListener('blur', inputUserNameBlurHandler);
+};
+
+setupOpen.addEventListener('click', function () {
+  setupOpenClickHandler();
+});
+
+setupOpen.addEventListener('keydown', function (evt) {
+  if (evt.key === 'Enter') {
+    setupOpenClickHandler();
+  }
+});
