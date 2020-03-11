@@ -5,13 +5,17 @@ var setup = document.querySelector('.setup');
 var setupOpen = document.querySelector('.setup-open');
 var setupClose = setup.querySelector('.setup-close');
 var setupInput = setup.querySelector('.setup-user-name');
+var setupWizardCoat = setup.querySelector('.wizard-coat');
+var setupWizardEyes = setup.querySelector('.wizard-eyes');
+var setupWizardFireball = setup.querySelector('.setup-fireball-wrap');
 
 var WIZARDS_QUANTITY = 4;
 var wizardParams = {
   NAME: ['Иван', 'Хуан Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия', 'Люпита', 'Вашингтон'],
   SURNAME: ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'],
   COAT_COLOR: ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'],
-  EYES_COLOR: ['black', 'red', 'blue', 'yellow', 'green']
+  EYES_COLOR: ['black', 'red', 'blue', 'yellow', 'green'],
+  FIREBALL_COLOR: ['#ee4830', '#30a8ee', '#5ce6c0', '#e848d5', '#e6e848']
 };
 
 var getRandomArrElement = function (arr) {
@@ -67,6 +71,24 @@ var inputUserNameBlurHandler = function () {
   document.addEventListener('keydown', popupCloseEscHandler);
 };
 
+var wizardCoatClickHandler = function () {
+  var coatColor = getRandomArrElement(wizardParams.COAT_COLOR);
+  setupWizardCoat.style.fill = coatColor;
+  setup.querySelector('[name="coat-color"]').value = coatColor;
+};
+
+var wizardEyesClickHandler = function () {
+  var eyesColor = getRandomArrElement(wizardParams.EYES_COLOR);
+  setupWizardEyes.style.fill = eyesColor;
+  setup.querySelector('[name="eyes-color"]').value = eyesColor;
+};
+
+var wizardFireballClickHandler = function () {
+  var fireballColor = getRandomArrElement(wizardParams.FIREBALL_COLOR);
+  setupWizardFireball.style.background = fireballColor;
+  setup.querySelector('[name="fireball-color"]').value = fireballColor;
+};
+
 var showSetupSimilarList = function () {
   similarListElement.innerHTML = '';
   setup.querySelector('.setup-similar').classList.remove('hidden');
@@ -78,6 +100,10 @@ var setupOpenClickHandler = function () {
   document.addEventListener('keydown', popupCloseEscHandler);
   setupClose.addEventListener('click', setupCloseClickHandler);
   setupClose.addEventListener('keydown', setupClosePressHandler);
+  setupWizardCoat.addEventListener('click', wizardCoatClickHandler);
+  setupWizardEyes.addEventListener('click', wizardEyesClickHandler);
+  setupWizardFireball.addEventListener('click', wizardFireballClickHandler);
+
   setupInput.removeEventListener('focus', inputUserNameFocusHandler);
   setupInput.removeEventListener('blur', inputUserNameBlurHandler);
 
@@ -89,6 +115,9 @@ var setupCloseClickHandler = function () {
   document.removeEventListener('keydown', popupCloseEscHandler);
   setupClose.removeEventListener('click', setupCloseClickHandler);
   setupClose.removeEventListener('keydown', setupClosePressHandler);
+  setupWizardCoat.removeEventListener('click', wizardCoatClickHandler);
+  setupWizardEyes.removeEventListener('click', wizardEyesClickHandler);
+  setupWizardFireball.removeEventListener('click', wizardFireballClickHandler);
   setupInput.addEventListener('focus', inputUserNameFocusHandler);
   setupInput.addEventListener('blur', inputUserNameBlurHandler);
 };
